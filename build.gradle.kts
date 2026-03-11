@@ -1,22 +1,14 @@
 plugins {
-    kotlin("jvm") version "2.3.0"
+    alias(libs.plugins.kotlin.jvm) apply false
 }
 
-group = "br.com.lbenaducci"
-version = "1.0.0"
+allprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
 
-repositories {
-    mavenCentral()
-}
+    group = "br.com.lbenaducci.meowth"
+    version = "0.0.1"
 
-dependencies {
-    testImplementation(kotlin("test"))
-}
-
-kotlin {
-    jvmToolchain(25)
-}
-
-tasks.test {
-    useJUnitPlatform()
+    repositories {
+        mavenCentral()
+    }
 }
