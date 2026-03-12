@@ -8,5 +8,7 @@ enum class ErrorCatalog(
     UUID_INVALID("invalid.category.uuid", "'category id' must be a valid UUID"),
     NAME_BLANK("invalid.category.name.blank", "'category name' cannot be blank"),
     NAME_SHORT("invalid.category.name.short", "'category name' must be 3 characters or more"),
-    NAME_LONG("invalid.category.name.long", "'category name' must be 30 characters or less")
+    NAME_LONG("invalid.category.name.long", "'category name' must be 30 characters or less"),
+    COLOR_BLANK("invalid.category.color.blank", "'category color' cannot be blank"),
+    COLOR_INVALID("invalid.category.color", "'category color' must be a valid hex color code")
 }

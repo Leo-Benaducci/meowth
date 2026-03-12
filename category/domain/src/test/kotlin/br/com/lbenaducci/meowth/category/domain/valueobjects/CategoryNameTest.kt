@@ -3,6 +3,8 @@ package br.com.lbenaducci.meowth.category.domain.valueobjects
 import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
 import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -24,16 +26,16 @@ class CategoryNameTest {
                 .also { assertEquals(ErrorCatalog.NAME_BLANK.code, it.code) }
         }
 
-        @Test
-        fun `given short name, then throw exception`() {
-            val name = "te"
+        @ParameterizedTest
+        @ValueSource(strings = ["a", "ab"])
+        fun `given short name, then throw exception`(name: String) {
             assertFailsWith<ValidationException> { CategoryName.with(name) }
                 .also { assertEquals(ErrorCatalog.NAME_SHORT.code, it.code) }
         }
 
         @Test
         fun `given long name, then throw exception`() {
-            val name = "Tincidunt commodo ea eum ea hendrerit"
+            val name = "a".repeat(31)
             assertFailsWith<ValidationException> { CategoryName.with(name) }
                 .also { assertEquals(ErrorCatalog.NAME_LONG.code, it.code) }
         }

@@ -1,0 +1,36 @@
+package br.com.lbenaducci.meowth.category.domain.valueobjects
+
+import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
+import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+
+class CategoryColorTest {
+    @Nested
+    inner class With {
+        @ParameterizedTest
+        @ValueSource(strings = ["#000", "#000000", "#FFF", "#FFFFFF", "#a1b2c3", "#A1B2C3"])
+        fun `given valid color, then instantiate CategoryColor`(color: String) {
+            val categoryColor = CategoryColor.with(color)
+            assertEquals(color.uppercase(), categoryColor.value)
+        }
+
+        @Test
+        fun `given blank color, then throw exception`() {
+            val color = "   "
+            assertFailsWith<ValidationException> { CategoryColor.with(color) }
+                .also { assertEquals(ErrorCatalog.COLOR_BLANK.code, it.code) }
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["#00", "#0000", "#00000", "#0000000", "000000", "#GGGGGG", "#12345G"])
+        fun `given invalid color, then throw exception`(color: String) {
+            assertFailsWith<ValidationException> { CategoryColor.with(color) }
+                .also { assertEquals(ErrorCatalog.COLOR_INVALID.code, it.code) }
+        }
+    }
+}
