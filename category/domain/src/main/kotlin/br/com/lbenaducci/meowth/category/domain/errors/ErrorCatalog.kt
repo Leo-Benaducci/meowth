@@ -10,5 +10,7 @@ enum class ErrorCatalog(
     NAME_SHORT("invalid.category.name.short", "'category name' must be 3 characters or more"),
     NAME_LONG("invalid.category.name.long", "'category name' must be 30 characters or less"),
     COLOR_BLANK("invalid.category.color.blank", "'category color' cannot be blank"),
-    COLOR_INVALID("invalid.category.color", "'category color' must be a valid hex color code")
+    COLOR_INVALID("invalid.category.color", "'category color' must be a valid hex color code"),
+    ICON_BLANK("invalid.category.icon.blank", "'category icon' cannot be blank"),
+    ICON_LONG("invalid.category.icon.long", "'category icon' must be 30 characters or less")
 }
