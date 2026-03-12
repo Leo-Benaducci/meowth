@@ -3,7 +3,8 @@ package br.com.lbenaducci.meowth.category.domain.valueobjects
 import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
 import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
 
-class CategoryColor private constructor(
+@JvmInline
+value class CategoryColor private constructor(
     val value: String
 ) {
     companion object {

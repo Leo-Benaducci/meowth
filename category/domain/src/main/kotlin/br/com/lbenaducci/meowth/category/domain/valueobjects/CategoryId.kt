@@ -5,7 +5,8 @@ import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
 import com.github.f4b6a3.uuid.alt.GUID
 import java.util.*
 
-class CategoryId private constructor(
+@JvmInline
+value class CategoryId private constructor(
     val value: UUID
 ) {
     companion object {
