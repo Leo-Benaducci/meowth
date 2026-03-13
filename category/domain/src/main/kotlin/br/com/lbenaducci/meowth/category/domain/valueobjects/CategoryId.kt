@@ -26,7 +26,7 @@ value class CategoryId private constructor(
         @JvmStatic
         fun with(id: String): CategoryId {
             try {
-                return CategoryId(UUID.fromString(id))
+                return with(UUID.fromString(id))
             } catch (_: IllegalArgumentException) {
                 throw ValidationException(ErrorCatalog.UUID_INVALID)
             }

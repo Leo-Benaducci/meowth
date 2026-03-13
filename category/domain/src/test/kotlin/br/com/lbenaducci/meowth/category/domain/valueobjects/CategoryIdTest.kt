@@ -39,14 +39,14 @@ class CategoryIdTest {
 
         @Test
         fun `given uuid string, then instantiate CategoryId`() {
-            val uuid = "d19eb2e5-c305-427d-9eb2-e5c305c27d76"
+            val uuid = "019cdab8-93fd-7262-8526-786a9ca26d05"
             val categoryId = CategoryId.with(uuid)
             assertNotNull(categoryId)
             assertEquals(uuid, categoryId.value.toString())
         }
 
         @Test
-        fun `given invalid uuid, then throw exception`() {
+        fun `given invalid uuid string, then throw exception`() {
             val uuid = "invalid-uuid"
             assertFailsWith<ValidationException> { CategoryId.with(uuid) }
                 .also { assertEquals(ErrorCatalog.UUID_INVALID.code, it.code) }
