@@ -1,7 +1,7 @@
 package br.com.lbenaducci.meowth.category.domain.valueobjects
 
-import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
 import java.util.*
 import kotlin.test.*
@@ -21,7 +21,7 @@ class CategoryIdTest {
         fun `given uuid not v7, then throw exception`() {
             val uuid = UUID.fromString("7d722c6b-1396-4883-b22c-6b13968883c4")
             assertFailsWith<ValidationException> { CategoryId(uuid) }
-                .also { assertEquals(ErrorCatalog.UUID_VERSION.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.UUID_VERSION.code, it.code) }
         }
 
         @Test
@@ -36,7 +36,7 @@ class CategoryIdTest {
         fun `given invalid uuid string, then throw exception`() {
             val uuid = "invalid-uuid"
             assertFailsWith<ValidationException> { CategoryId(uuid) }
-                .also { assertEquals(ErrorCatalog.UUID_INVALID.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.UUID_INVALID.code, it.code) }
         }
     }
 

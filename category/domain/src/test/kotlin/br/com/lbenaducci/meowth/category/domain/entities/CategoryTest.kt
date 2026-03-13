@@ -1,8 +1,8 @@
 package br.com.lbenaducci.meowth.category.domain.entities
 
 import br.com.lbenaducci.meowth.category.domain.datatypes.CategoryType
-import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -42,7 +42,7 @@ class CategoryTest {
             val color = "#FF0000"
 
             assertFailsWith<ValidationException> { Category.create(name, type, icon, color) }
-                .also { assertEquals(ErrorCatalog.NAME_BLANK.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.NAME_BLANK.code, it.code) }
         }
 
         @Test
@@ -53,7 +53,7 @@ class CategoryTest {
             val color = "#FF0000"
 
             assertFailsWith<ValidationException> { Category.create(name, type, icon, color) }
-                .also { assertEquals(ErrorCatalog.ICON_BLANK.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.ICON_BLANK.code, it.code) }
         }
 
         @Test
@@ -64,7 +64,7 @@ class CategoryTest {
             val color = "invalid"
 
             assertFailsWith<ValidationException> { Category.create(name, type, icon, color) }
-                .also { assertEquals(ErrorCatalog.COLOR_INVALID.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
         }
     }
 }

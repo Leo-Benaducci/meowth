@@ -1,7 +1,7 @@
 package br.com.lbenaducci.meowth.category.domain.valueobjects
 
-import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 
 @JvmInline
 value class CategoryColor(
@@ -9,10 +9,10 @@ value class CategoryColor(
 ) {
     init {
         if (value.isBlank()) {
-            throw ValidationException(ErrorCatalog.COLOR_BLANK)
+            throw ValidationException(CategoryErrorCatalog.COLOR_BLANK)
         }
         if (!Regex("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$").matches(value)) {
-            throw ValidationException(ErrorCatalog.COLOR_INVALID)
+            throw ValidationException(CategoryErrorCatalog.COLOR_INVALID)
         }
     }
 }

@@ -1,9 +1,11 @@
 package br.com.lbenaducci.meowth.category.domain.errors
 
-enum class ErrorCatalog(
-    val code: String,
-    val defaultMessage: String
-) {
+import br.com.lbenaducci.meowth.shared.errors.ErrorCatalog
+
+enum class CategoryErrorCatalog(
+    override val code: String,
+    override val defaultMessage: String
+) : ErrorCatalog {
     UUID_VERSION("invalid.category.uuid.version", "'category id' must be UUID version 7"),
     UUID_INVALID("invalid.category.uuid", "'category id' must be a valid UUID"),
     NAME_BLANK("invalid.category.name.blank", "'category name' cannot be blank"),
@@ -12,5 +14,6 @@ enum class ErrorCatalog(
     COLOR_BLANK("invalid.category.color.blank", "'category color' cannot be blank"),
     COLOR_INVALID("invalid.category.color", "'category color' must be a valid hex color code"),
     ICON_BLANK("invalid.category.icon.blank", "'category icon' cannot be blank"),
-    ICON_LONG("invalid.category.icon.long", "'category icon' must be 30 characters or less")
+    ICON_LONG("invalid.category.icon.long", "'category icon' must be 30 characters or less"),
+    REPOSITORY_ERROR("error.category.repository.unexpected", "an unexpected error occurred in the category repository")
 }

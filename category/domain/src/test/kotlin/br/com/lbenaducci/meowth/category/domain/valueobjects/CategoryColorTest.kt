@@ -1,7 +1,7 @@
 package br.com.lbenaducci.meowth.category.domain.valueobjects
 
-import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -23,14 +23,14 @@ class CategoryColorTest {
         fun `given blank color, then throw exception`() {
             val color = "   "
             assertFailsWith<ValidationException> { CategoryColor(color) }
-                .also { assertEquals(ErrorCatalog.COLOR_BLANK.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.COLOR_BLANK.code, it.code) }
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["#00", "#0000", "#00000", "#0000000", "000000", "#GGGGGG", "#12345G"])
         fun `given invalid color, then throw exception`(color: String) {
             assertFailsWith<ValidationException> { CategoryColor(color) }
-                .also { assertEquals(ErrorCatalog.COLOR_INVALID.code, it.code) }
+                .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
         }
     }
 }

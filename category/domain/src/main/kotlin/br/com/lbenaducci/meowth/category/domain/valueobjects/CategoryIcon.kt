@@ -1,7 +1,7 @@
 package br.com.lbenaducci.meowth.category.domain.valueobjects
 
-import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 
 @JvmInline
 value class CategoryIcon(
@@ -9,10 +9,10 @@ value class CategoryIcon(
 ) {
     init {
         if (value.isBlank()) {
-            throw ValidationException(ErrorCatalog.ICON_BLANK)
+            throw ValidationException(CategoryErrorCatalog.ICON_BLANK)
         }
         if (value.length > 30) {
-            throw ValidationException(ErrorCatalog.ICON_LONG)
+            throw ValidationException(CategoryErrorCatalog.ICON_LONG)
         }
     }
 }

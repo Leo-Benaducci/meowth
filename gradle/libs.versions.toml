@@ -1,12 +1,16 @@
 [versions]
 kotlin = "2.3.0"
 uuid-creator = "6.1.1"
+slf4j = "2.0.17"
 mockito-kotlin = "6.2.3"
+mockito-core = "5.23.0"
 junit = "6.0.3"
 
 [libraries]
 uuid-creator = { module = "com.github.f4b6a3:uuid-creator", version.ref = "uuid-creator" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito-core" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 

@@ -3,11 +3,12 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":category-domain"))
     implementation(project(":shared"))
-    implementation(libs.uuid.creator)
+    implementation(libs.slf4j.api)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.mockito.kotlin)
-    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.mockito.junit.jupiter)
 }
 
 kotlin {

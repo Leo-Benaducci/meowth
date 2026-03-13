@@ -1,7 +1,7 @@
 package br.com.lbenaducci.meowth.category.domain.valueobjects
 
-import br.com.lbenaducci.meowth.category.domain.errors.ErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 import com.github.f4b6a3.uuid.alt.GUID
 import java.util.*
 
@@ -11,7 +11,7 @@ value class CategoryId(
 ) {
     init {
         if (value.version() != 7) {
-            throw ValidationException(ErrorCatalog.UUID_VERSION)
+            throw ValidationException(CategoryErrorCatalog.UUID_VERSION)
         }
     }
 
@@ -19,7 +19,7 @@ value class CategoryId(
         try {
             UUID.fromString(id)
         } catch (_: IllegalArgumentException) {
-            throw ValidationException(ErrorCatalog.UUID_INVALID)
+            throw ValidationException(CategoryErrorCatalog.UUID_INVALID)
         }
     )
 

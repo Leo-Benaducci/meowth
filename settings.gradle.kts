@@ -3,6 +3,9 @@ plugins {
 }
 rootProject.name = "meowth"
 
+include("shared")
 include("category-domain")
+include("category-application")
 
 project(":category-domain").projectDir = file("category/domain")
+project(":category-application").projectDir = file("category/application")
