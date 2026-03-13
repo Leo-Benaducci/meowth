@@ -6,6 +6,7 @@ rootProject.name = "meowth"
 include("shared")
 include("category-domain")
 include("category-application")
+include("infrastructure")
 
 project(":category-domain").projectDir = file("category/domain")
 project(":category-application").projectDir = file("category/application")
