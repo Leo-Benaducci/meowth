@@ -6,6 +6,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":category-application"))
     implementation(project(":category-domain"))
     implementation(project(":shared"))
     implementation(libs.spring.boot.starter.actuator)
@@ -15,9 +16,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
 
     testImplementation(libs.kotlin.test)
-    testImplementation(libs.spring.boot.starter.actuator.test)
-    testImplementation(libs.spring.boot.starter.data.mongodb.test)
-    testImplementation(libs.spring.boot.starter.webmvc.test)
+    testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.testcontainers)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.testcontainers.junit.jupiter)
@@ -26,7 +25,7 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(25)
+    jvmToolchain(21)
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Xjsr305=strict",
