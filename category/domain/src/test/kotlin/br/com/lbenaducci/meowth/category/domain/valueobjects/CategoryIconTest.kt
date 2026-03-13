@@ -9,25 +9,25 @@ import kotlin.test.assertFailsWith
 
 class CategoryIconTest {
     @Nested
-    inner class With {
+    inner class Constructor {
         @Test
         fun `given valid icon, then instantiate CategoryIcon`() {
             val icon = "house"
-            val categoryIcon = CategoryIcon.with(icon)
+            val categoryIcon = CategoryIcon(icon)
             assertEquals(icon, categoryIcon.value)
         }
 
         @Test
         fun `given blank icon, then throw exception`() {
             val icon = "   "
-            val exception = assertFailsWith<ValidationException> { CategoryIcon.with(icon) }
+            val exception = assertFailsWith<ValidationException> { CategoryIcon(icon) }
             assertEquals(ErrorCatalog.ICON_BLANK.code, exception.code)
         }
 
         @Test
         fun `given long icon, then throw exception`() {
             val icon = "a".repeat(31)
-            val exception = assertFailsWith<ValidationException> { CategoryIcon.with(icon) }
+            val exception = assertFailsWith<ValidationException> { CategoryIcon(icon) }
             assertEquals(ErrorCatalog.ICON_LONG.code, exception.code)
         }
     }

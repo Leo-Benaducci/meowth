@@ -14,7 +14,6 @@ class Category private constructor(
     val appearance: CategoryAppearance
 ) {
     companion object {
-        @JvmStatic
         fun create(
             name: String,
             type: CategoryType,
@@ -24,7 +23,7 @@ class Category private constructor(
             return Category(
                 id = CategoryId.generate(),
                 createdAt = Instant.now(),
-                name = CategoryName.with(name),
+                name = CategoryName(name),
                 type = type,
                 appearance = CategoryAppearance.with(icon, color)
             )

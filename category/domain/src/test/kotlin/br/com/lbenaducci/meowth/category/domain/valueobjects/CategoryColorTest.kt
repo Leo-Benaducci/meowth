@@ -11,25 +11,25 @@ import kotlin.test.assertFailsWith
 
 class CategoryColorTest {
     @Nested
-    inner class With {
+    inner class Constructor {
         @ParameterizedTest
         @ValueSource(strings = ["#000", "#000000", "#FFF", "#FFFFFF", "#a1b2c3", "#A1B2C3"])
         fun `given valid color, then instantiate CategoryColor`(color: String) {
-            val categoryColor = CategoryColor.with(color)
-            assertEquals(color.uppercase(), categoryColor.value)
+            val categoryColor = CategoryColor(color)
+            assertEquals(color, categoryColor.value)
         }
 
         @Test
         fun `given blank color, then throw exception`() {
             val color = "   "
-            assertFailsWith<ValidationException> { CategoryColor.with(color) }
+            assertFailsWith<ValidationException> { CategoryColor(color) }
                 .also { assertEquals(ErrorCatalog.COLOR_BLANK.code, it.code) }
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["#00", "#0000", "#00000", "#0000000", "000000", "#GGGGGG", "#12345G"])
         fun `given invalid color, then throw exception`(color: String) {
-            assertFailsWith<ValidationException> { CategoryColor.with(color) }
+            assertFailsWith<ValidationException> { CategoryColor(color) }
                 .also { assertEquals(ErrorCatalog.COLOR_INVALID.code, it.code) }
         }
     }

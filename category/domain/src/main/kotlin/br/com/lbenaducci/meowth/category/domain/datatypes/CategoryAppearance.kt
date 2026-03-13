@@ -8,11 +8,10 @@ class CategoryAppearance private constructor(
     val color: CategoryColor
 ) {
     companion object {
-        @JvmStatic
         fun with(icon: String, color: String): CategoryAppearance {
             return CategoryAppearance(
-                icon = CategoryIcon.with(icon),
-                color = CategoryColor.with(color)
+                icon = CategoryIcon(icon),
+                color = CategoryColor(color)
             )
         }
     }
