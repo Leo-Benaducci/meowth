@@ -5,13 +5,20 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
 }
 
+group = "br.com.lbenaducci.meowth.infrastructure"
+version = "0.0.1"
+
+tasks.bootJar {
+    archiveFileName.set("meowth-app-${project.version}.jar")
+}
+
 dependencies {
     implementation(project(":category-application"))
     implementation(project(":category-domain"))
     implementation(project(":shared"))
+    implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.data.mongodb)
-    implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.kotlin.reflect)
     implementation(libs.jackson.module.kotlin)
 

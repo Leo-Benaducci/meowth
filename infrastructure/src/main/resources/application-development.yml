@@ -1,0 +1,11 @@
+server:
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 2
+
+mongodb:
+  username: ${DB_USER:root}
+  password: ${DB_PASS:123456}
+  database: meowth
+  host: ${DB_HOST:localhost:27017}
