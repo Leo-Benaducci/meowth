@@ -1,7 +1,7 @@
-package br.com.lbenaducci.meowth.category.domain.repositories
+package br.com.lbenaducci.meowth.category.domain.gateways
 
 import br.com.lbenaducci.meowth.category.domain.entities.Category
 
-interface CategoryRepository {
+interface CategoryGateway {
     fun save(category: Category)
 }

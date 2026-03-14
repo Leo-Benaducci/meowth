@@ -2,12 +2,12 @@ package br.com.lbenaducci.meowth.category.application.usecases.create
 
 import br.com.lbenaducci.meowth.category.domain.entities.Category
 import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
-import br.com.lbenaducci.meowth.category.domain.repositories.CategoryRepository
+import br.com.lbenaducci.meowth.category.domain.gateways.CategoryGateway
 import br.com.lbenaducci.meowth.shared.exceptions.RepositoryException
 import org.slf4j.LoggerFactory
 
 class CreateCategoryUseCase(
-    private val repository: CategoryRepository
+    private val gateway: CategoryGateway
 ) {
     private val log = LoggerFactory.getLogger(CreateCategoryUseCase::class.java)
 
@@ -19,7 +19,7 @@ class CreateCategoryUseCase(
             color = input.color
         )
         try {
-            repository.save(category)
+            gateway.save(category)
         } catch (e: Exception) {
             log.error("Error creating category", e)
             throw RepositoryException(CategoryErrorCatalog.REPOSITORY_ERROR)

@@ -4,7 +4,7 @@ import br.com.lbenaducci.meowth.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
 import br.com.lbenaducci.meowth.shared.exceptions.RepositoryException
-import br.com.lbenaducci.meowth.category.domain.repositories.CategoryRepository
+import br.com.lbenaducci.meowth.category.domain.gateways.CategoryGateway
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -22,7 +22,7 @@ import kotlin.test.assertNotNull
 @ExtendWith(MockitoExtension::class)
 class CreateCategoryUseCaseTest {
     @Mock
-    private lateinit var repository: CategoryRepository
+    private lateinit var gateway: CategoryGateway
 
     @InjectMocks
     private lateinit var useCase: CreateCategoryUseCase
@@ -39,7 +39,7 @@ class CreateCategoryUseCaseTest {
         val output = useCase.execute(input)
 
         assertNotNull(output.id)
-        verify(repository).save(any())
+        verify(gateway).save(any())
     }
 
     @Test
@@ -54,7 +54,7 @@ class CreateCategoryUseCaseTest {
         assertFailsWith<ValidationException> { useCase.execute(input) }
             .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
 
-        verify(repository, never()).save(any())
+        verify(gateway, never()).save(any())
     }
 
     @Test
@@ -66,11 +66,11 @@ class CreateCategoryUseCaseTest {
             color = "#FF0000"
         )
 
-        whenever(repository.save(any())).doThrow(RuntimeException("Repository failed"))
+        whenever(gateway.save(any())).doThrow(RuntimeException("Repository failed"))
 
         assertFailsWith<RepositoryException> { useCase.execute(input) }
             .also { assertEquals(CategoryErrorCatalog.REPOSITORY_ERROR.code, it.code) }
 
-        verify(repository).save(any())
+        verify(gateway).save(any())
     }
 }
