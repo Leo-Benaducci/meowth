@@ -5,6 +5,7 @@ import br.com.lbenaducci.meowth.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.category.domain.valueobjects.CategoryId
 import br.com.lbenaducci.meowth.category.domain.valueobjects.CategoryName
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class Category private constructor(
     val id: CategoryId,
@@ -22,7 +23,7 @@ class Category private constructor(
         ): Category {
             return Category(
                 id = CategoryId.generate(),
-                createdAt = Instant.now(),
+                createdAt = Instant.now().truncatedTo(ChronoUnit.MILLIS),
                 name = CategoryName(name),
                 type = type,
                 appearance = CategoryAppearance.with(icon, color)
