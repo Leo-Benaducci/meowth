@@ -1,7 +1,6 @@
 [versions]
 kotlin = "2.2.21"
 uuid-creator = "6.1.1"
-slf4j = "2.0.17"
 mockito-kotlin = "6.2.3"
 mockito-core = "5.23.0"
 junit = "6.0.3"
@@ -10,7 +9,6 @@ spring-dependency-management = "1.1.7"
 
 [libraries]
 uuid-creator = { module = "com.github.f4b6a3:uuid-creator", version.ref = "uuid-creator" }
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
 spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
