@@ -1,6 +1,6 @@
 package br.com.lbenaducci.meowth.features.category.domain.errors
 
-import br.com.lbenaducci.meowth.shared.errors.ErrorCatalog
+import br.com.lbenaducci.meowth.shared.domain.errors.ErrorCatalog
 
 enum class CategoryErrorCatalog(
     override val code: String,

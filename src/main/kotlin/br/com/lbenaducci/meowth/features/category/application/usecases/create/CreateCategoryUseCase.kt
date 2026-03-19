@@ -3,7 +3,7 @@ package br.com.lbenaducci.meowth.features.category.application.usecases.create
 import br.com.lbenaducci.meowth.features.category.domain.entities.Category
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.features.category.domain.gateways.CategoryGateway
-import br.com.lbenaducci.meowth.shared.exceptions.RepositoryException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import org.slf4j.LoggerFactory
 
 class CreateCategoryUseCase(

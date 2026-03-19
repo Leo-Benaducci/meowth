@@ -2,7 +2,7 @@ package br.com.lbenaducci.meowth.features.category.domain.entities
 
 import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
-import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,7 +1,7 @@
 package br.com.lbenaducci.meowth.features.category.domain.valueobjects
 
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
-import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 
 @JvmInline
 value class CategoryColor(

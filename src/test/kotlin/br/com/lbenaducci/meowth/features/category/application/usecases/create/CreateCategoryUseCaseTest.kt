@@ -2,8 +2,8 @@ package br.com.lbenaducci.meowth.features.category.application.usecases.create
 
 import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
-import br.com.lbenaducci.meowth.shared.exceptions.ValidationException
-import br.com.lbenaducci.meowth.shared.exceptions.RepositoryException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import br.com.lbenaducci.meowth.features.category.domain.gateways.CategoryGateway
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
