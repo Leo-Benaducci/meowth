@@ -1,0 +1,111 @@
+package br.com.lbenaducci.meowth.features.category.infrastructure.presentation
+
+import br.com.lbenaducci.meowth.features.category.application.usecases.create.CreateCategoryOutput
+import br.com.lbenaducci.meowth.features.category.application.usecases.create.CreateCategoryUseCase
+import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
+import br.com.lbenaducci.meowth.platform.ControllerTest
+import br.com.lbenaducci.meowth.platform.config.GlobalExceptionHandler
+import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
+import org.junit.jupiter.api.Nested
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.post
+import java.util.*
+import kotlin.test.Test
+
+@ControllerTest(controllers = [CategoryRestController::class, GlobalExceptionHandler::class])
+class CategoryRestControllerTest {
+    @Autowired
+    private lateinit var mockMvc: MockMvc
+
+    @MockitoBean
+    private lateinit var createCategoryUseCase: CreateCategoryUseCase
+
+    @Nested
+    inner class Create {
+        @Test
+        fun `given valid input, then return 200 and category id`() {
+            val requestBody = """
+            {
+                "name": "Test Category",
+                "type": "EXPENSE",
+                "icon": "icon",
+                "color": "#FF0000"
+            }
+        """.trimIndent()
+            val outputId = UUID.randomUUID().toString()
+            whenever(createCategoryUseCase.execute(any()))
+                .thenReturn(CreateCategoryOutput(outputId))
+
+            mockMvc.post("/v1/categories") {
+                contentType = MediaType.APPLICATION_JSON
+                content = requestBody
+            }.andExpect {
+                status { isCreated() }
+                header { string("Location", "/categories/$outputId") }
+                jsonPath("$.id") { value(outputId) }
+            }
+        }
+
+        @Test
+        fun `given invalid input, then return 400`() {
+            val requestBody = """
+            {
+                "name": "Test",
+                "type": "EXPENSE",
+                "icon": "icon",
+                "color": "red"
+            }
+        """.trimIndent()
+
+            whenever(createCategoryUseCase.execute(any()))
+                .thenThrow(ValidationException(CategoryErrorCatalog.NAME_BLANK))
+
+            mockMvc.post("/v1/categories") {
+                contentType = MediaType.APPLICATION_JSON
+                content = requestBody
+                header("Accept-Language", "pt-BR")
+            }.andExpect {
+                status { isBadRequest() }
+                jsonPath("$.timestamp") { exists() }
+                jsonPath("$.status") { value("BAD_REQUEST") }
+                jsonPath("$.path") { value("/v1/categories") }
+                jsonPath("$.code") { value("invalid.category.name.blank") }
+                jsonPath("$.title") { value("Bad Request") }
+                jsonPath("$.message") { value("category name cannot be blank") }
+            }
+        }
+
+        @Test
+        fun `given valid input, when call throw RepositoryException, then return 422`() {
+            val requestBody = """
+            {
+                "name": "Test Category",
+                "type": "EXPENSE",
+                "icon": "icon",
+                "color": "#FF0000"
+            }
+        """.trimIndent()
+            whenever(createCategoryUseCase.execute(any()))
+                .thenThrow(RepositoryException(CategoryErrorCatalog.REPOSITORY_ERROR))
+
+            mockMvc.post("/v1/categories") {
+                contentType = MediaType.APPLICATION_JSON
+                content = requestBody
+            }.andExpect {
+                status { isInternalServerError() }
+                jsonPath("$.timestamp") { exists() }
+                jsonPath("$.status") { value("INTERNAL_SERVER_ERROR") }
+                jsonPath("$.path") { value("/v1/categories") }
+                jsonPath("$.code") { value("error.category.repository.unexpected") }
+                jsonPath("$.title") { value("Internal Server Error") }
+                jsonPath("$.message") { value("an unexpected error occurred in the category repository") }
+            }
+        }
+    }
+}
