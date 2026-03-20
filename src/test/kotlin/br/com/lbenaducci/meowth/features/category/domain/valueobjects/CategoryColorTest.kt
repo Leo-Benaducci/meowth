@@ -30,7 +30,10 @@ class CategoryColorTest {
         @ValueSource(strings = ["#00", "#0000", "#00000", "#0000000", "000000", "#GGGGGG", "#12345G"])
         fun `given invalid color, then throw exception`(color: String) {
             assertFailsWith<ValidationException> { CategoryColor(color) }
-                .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code)
+                    assertEquals(color, it.params["invalid"])
+                }
         }
     }
 }

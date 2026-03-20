@@ -21,7 +21,10 @@ class CategoryIdTest {
         fun `given uuid not v7, then throw exception`() {
             val uuid = UUID.fromString("7d722c6b-1396-4883-b22c-6b13968883c4")
             assertFailsWith<ValidationException> { CategoryId(uuid) }
-                .also { assertEquals(CategoryErrorCatalog.UUID_VERSION.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.UUID_VERSION.code, it.code)
+                    assertEquals(uuid, it.params["invalid"])
+                }
         }
 
         @Test
@@ -36,7 +39,10 @@ class CategoryIdTest {
         fun `given invalid uuid string, then throw exception`() {
             val uuid = "invalid-uuid"
             assertFailsWith<ValidationException> { CategoryId(uuid) }
-                .also { assertEquals(CategoryErrorCatalog.UUID_INVALID.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.UUID_INVALID.code, it.code)
+                    assertEquals(uuid, it.params["invalid"])
+                }
         }
     }
 

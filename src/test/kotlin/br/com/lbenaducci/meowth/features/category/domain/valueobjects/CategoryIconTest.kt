@@ -20,15 +20,18 @@ class CategoryIconTest {
         @Test
         fun `given blank icon, then throw exception`() {
             val icon = "   "
-            val exception = assertFailsWith<ValidationException> { CategoryIcon(icon) }
-            assertEquals(CategoryErrorCatalog.ICON_BLANK.code, exception.code)
+            assertFailsWith<ValidationException> { CategoryIcon(icon) }
+                .also { assertEquals(CategoryErrorCatalog.ICON_BLANK.code, it.code) }
         }
 
         @Test
         fun `given long icon, then throw exception`() {
             val icon = "a".repeat(31)
-            val exception = assertFailsWith<ValidationException> { CategoryIcon(icon) }
-            assertEquals(CategoryErrorCatalog.ICON_LONG.code, exception.code)
+            assertFailsWith<ValidationException> { CategoryIcon(icon) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.ICON_LONG.code, it.code)
+                    assertEquals(icon, it.params["invalid"])
+                }
         }
     }
 }

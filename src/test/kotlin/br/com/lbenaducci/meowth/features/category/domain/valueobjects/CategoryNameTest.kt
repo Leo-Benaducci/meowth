@@ -30,14 +30,20 @@ class CategoryNameTest {
         @ValueSource(strings = ["a", "ab"])
         fun `given short name, then throw exception`(name: String) {
             assertFailsWith<ValidationException> { CategoryName(name) }
-                .also { assertEquals(CategoryErrorCatalog.NAME_SHORT.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.NAME_SHORT.code, it.code)
+                    assertEquals(name, it.params["invalid"])
+                }
         }
 
         @Test
         fun `given long name, then throw exception`() {
             val name = "a".repeat(31)
             assertFailsWith<ValidationException> { CategoryName(name) }
-                .also { assertEquals(CategoryErrorCatalog.NAME_LONG.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.NAME_LONG.code, it.code)
+                    assertEquals(name, it.params["invalid"])
+                }
         }
     }
 }

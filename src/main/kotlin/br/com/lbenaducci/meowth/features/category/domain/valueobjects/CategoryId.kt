@@ -11,7 +11,7 @@ value class CategoryId(
 ) {
     init {
         if (value.version() != 7) {
-            throw ValidationException(CategoryErrorCatalog.UUID_VERSION)
+            throw ValidationException(CategoryErrorCatalog.UUID_VERSION, value)
         }
     }
 
@@ -19,7 +19,7 @@ value class CategoryId(
         try {
             UUID.fromString(id)
         } catch (_: IllegalArgumentException) {
-            throw ValidationException(CategoryErrorCatalog.UUID_INVALID)
+            throw ValidationException(CategoryErrorCatalog.UUID_INVALID, id)
         }
     )
 

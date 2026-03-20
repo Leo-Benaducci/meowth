@@ -12,10 +12,10 @@ value class CategoryName(
             throw ValidationException(CategoryErrorCatalog.NAME_BLANK)
         }
         if (value.length < 3) {
-            throw ValidationException(CategoryErrorCatalog.NAME_SHORT)
+            throw ValidationException(CategoryErrorCatalog.NAME_SHORT, value)
         }
         if (value.length > 30) {
-            throw ValidationException(CategoryErrorCatalog.NAME_LONG)
+            throw ValidationException(CategoryErrorCatalog.NAME_LONG, value)
         }
     }
 }

@@ -12,7 +12,7 @@ value class CategoryColor(
             throw ValidationException(CategoryErrorCatalog.COLOR_BLANK)
         }
         if (!Regex("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$").matches(value)) {
-            throw ValidationException(CategoryErrorCatalog.COLOR_INVALID)
+            throw ValidationException(CategoryErrorCatalog.COLOR_INVALID, value)
         }
     }
 }

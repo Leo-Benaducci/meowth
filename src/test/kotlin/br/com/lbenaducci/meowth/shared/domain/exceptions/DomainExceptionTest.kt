@@ -9,15 +9,17 @@ class DomainExceptionTest {
     @Nested
     inner class Constructor {
         @Test
-        fun `given error, then instantiate DomainException`() {
+        fun `given error and params, then instantiate DomainException`() {
             val error = object : ErrorCatalog {
                 override val code: String = "stub_error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val exception = DomainException(error)
+            val params = mapOf("param1" to "value1")
+            val exception = DomainException(error, params)
 
             assertEquals(error.code, exception.code)
             assertEquals(error.defaultMessage, exception.message)
+            assertEquals(params, exception.params)
         }
     }
 
@@ -29,9 +31,10 @@ class DomainExceptionTest {
                 override val code: String = "stub_error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val exception = DomainException(error)
+            val params = mapOf("param1" to "value1")
+            val exception = DomainException(error, params)
 
-            assertEquals("DomainException(code='stub_error', message='Stub error message')", "$exception")
+            assertEquals("DomainException(code='stub_error', message='Stub error message', params={param1=value1})", "$exception")
         }
     }
 }

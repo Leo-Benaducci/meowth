@@ -12,7 +12,7 @@ value class CategoryIcon(
             throw ValidationException(CategoryErrorCatalog.ICON_BLANK)
         }
         if (value.length > 30) {
-            throw ValidationException(CategoryErrorCatalog.ICON_LONG)
+            throw ValidationException(CategoryErrorCatalog.ICON_LONG, value)
         }
     }
 }
