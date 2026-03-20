@@ -26,7 +26,6 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.testcontainers)
-    testImplementation(libs.testcontainers.junit.jupiter)
     testImplementation(libs.testcontainers.mongodb)
 }
 
