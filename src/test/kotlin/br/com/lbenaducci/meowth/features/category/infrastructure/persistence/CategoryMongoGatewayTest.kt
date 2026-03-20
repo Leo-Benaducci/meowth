@@ -1,8 +1,7 @@
-package br.com.lbenaducci.meowth.features.category.infrastructure
+package br.com.lbenaducci.meowth.features.category.infrastructure.persistence
 
 import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.entities.Category
-import br.com.lbenaducci.meowth.features.category.infrastructure.persistence.CategoryRepository
 import br.com.lbenaducci.meowth.platform.MongoRepositoryTest
 import br.com.lbenaducci.meowth.platform.MongoTestContainer
 import org.junit.jupiter.api.Nested
