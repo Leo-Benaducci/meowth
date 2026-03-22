@@ -4,7 +4,6 @@ import br.com.lbenaducci.meowth.features.category.application.usecases.create.Cr
 import br.com.lbenaducci.meowth.features.category.application.usecases.create.CreateCategoryUseCase
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.platform.ControllerTest
-import br.com.lbenaducci.meowth.platform.config.GlobalExceptionHandler
 import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
@@ -18,7 +17,7 @@ import org.springframework.test.web.servlet.post
 import java.util.*
 import kotlin.test.Test
 
-@ControllerTest(controllers = [CategoryRestController::class, GlobalExceptionHandler::class])
+@ControllerTest(controllers = [CategoryRestController::class])
 class CategoryRestControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -29,7 +28,7 @@ class CategoryRestControllerTest {
     @Nested
     inner class Create {
         @Test
-        fun `given valid input, then return 200 and category id`() {
+        fun `given valid input, then return 201 and category id`() {
             val requestBody = """
             {
                 "name": "Test Category",
