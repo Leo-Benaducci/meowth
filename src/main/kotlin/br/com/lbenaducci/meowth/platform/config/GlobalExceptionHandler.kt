@@ -5,8 +5,6 @@ import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.servlet.http.HttpServletRequest
-import org.springframework.context.MessageSource
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -38,10 +36,13 @@ class GlobalExceptionHandler {
         return ErrorResponse(
             status = status.name,
             path = HtmlUtils.htmlEscape(request.requestURI),
-            code = ex.code,
             title = status.reasonPhrase,
-            message = HtmlUtils.htmlEscape(ex.error.defaultMessage),
-            params = ex.params
+            details = ErrorResponse.Details(
+                code = ex.detail.error.code,
+                message = HtmlUtils.htmlEscape(ex.detail.error.defaultMessage),
+                field = ex.detail.field,
+                rejectedValue = ex.detail.rejectedValue
+            )
         )
     }
 
@@ -50,9 +51,14 @@ class GlobalExceptionHandler {
         val timestamp: Instant = Instant.now(),
         val status: String,
         val path: String,
-        val code: String,
         val title: String,
-        val message: String,
-        val params: Map<String, Any> = emptyMap()
-    )
+        val details: Details
+    ) {
+        data class Details(
+            val code: String,
+            val message: String,
+            val field: String?,
+            val rejectedValue: Any?,
+        )
+    }
 }

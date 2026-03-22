@@ -58,7 +58,7 @@ class CreateCategoryUseCaseIT : MongoTestContainer() {
         assertEquals(0, repository.count())
 
         assertFailsWith<ValidationException> { useCase.execute(input) }
-            .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
+            .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID, it.detail.error) }
 
         assertEquals(0, repository.count())
     }

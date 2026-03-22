@@ -5,13 +5,15 @@ import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import com.github.f4b6a3.uuid.alt.GUID
 import java.util.*
 
+private const val FIELD = "category.id"
+
 @JvmInline
 value class CategoryId(
     val value: UUID
 ) {
     init {
         if (value.version() != 7) {
-            throw ValidationException(CategoryErrorCatalog.UUID_VERSION, value)
+            throw ValidationException(CategoryErrorCatalog.UUID_VERSION, FIELD, value)
         }
     }
 
@@ -19,7 +21,7 @@ value class CategoryId(
         try {
             UUID.fromString(id)
         } catch (_: IllegalArgumentException) {
-            throw ValidationException(CategoryErrorCatalog.UUID_INVALID, id)
+            throw ValidationException(CategoryErrorCatalog.UUID_INVALID, FIELD, id)
         }
     )
 

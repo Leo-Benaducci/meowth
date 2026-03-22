@@ -64,20 +64,21 @@ class CategoryRestControllerTest {
         """.trimIndent()
 
             whenever(createCategoryUseCase.execute(any()))
-                .thenThrow(ValidationException(CategoryErrorCatalog.NAME_BLANK))
+                .thenThrow(ValidationException(CategoryErrorCatalog.COLOR_INVALID, "category.appearance.color", "red"))
 
             mockMvc.post("/v1/categories") {
                 contentType = MediaType.APPLICATION_JSON
                 content = requestBody
-                header("Accept-Language", "pt-BR")
             }.andExpect {
                 status { isBadRequest() }
                 jsonPath("$.timestamp") { exists() }
                 jsonPath("$.status") { value("BAD_REQUEST") }
                 jsonPath("$.path") { value("/v1/categories") }
-                jsonPath("$.code") { value("invalid.category.name.blank") }
                 jsonPath("$.title") { value("Bad Request") }
-                jsonPath("$.message") { value("category name cannot be blank") }
+                jsonPath("$.details.code") { value("invalid.category.color") }
+                jsonPath("$.details.message") { value("category color must be a valid hex color code") }
+                jsonPath("$.details.field") { value("category.appearance.color") }
+                jsonPath("$.details.rejectedValue") { value("red") }
             }
         }
 
@@ -102,9 +103,9 @@ class CategoryRestControllerTest {
                 jsonPath("$.timestamp") { exists() }
                 jsonPath("$.status") { value("INTERNAL_SERVER_ERROR") }
                 jsonPath("$.path") { value("/v1/categories") }
-                jsonPath("$.code") { value("error.category.repository.unexpected") }
                 jsonPath("$.title") { value("Internal Server Error") }
-                jsonPath("$.message") { value("an unexpected error occurred in the category repository") }
+                jsonPath("$.details.code") { value("error.category.repository.unexpected") }
+                jsonPath("$.details.message") { value("an unexpected error occurred in the category repository") }
             }
         }
     }

@@ -9,17 +9,18 @@ class DomainExceptionTest {
     @Nested
     inner class Constructor {
         @Test
-        fun `given error and params, then instantiate DomainException`() {
+        fun `given error, then instantiate DomainException`() {
             val error = object : ErrorCatalog {
                 override val code: String = "stub_error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val params = mapOf("param1" to "value1")
-            val exception = DomainException(error, params)
+            val field = "field"
+            val rejectedValue = "invalid"
+            val exception = DomainException(error, field, rejectedValue)
 
-            assertEquals(error.code, exception.code)
-            assertEquals(error.defaultMessage, exception.message)
-            assertEquals(params, exception.params)
+            assertEquals(error, exception.detail.error)
+            assertEquals(field, exception.detail.field)
+            assertEquals(rejectedValue, exception.detail.rejectedValue)
         }
     }
 
@@ -28,13 +29,31 @@ class DomainExceptionTest {
         @Test
         fun `given exception, then return string representation`() {
             val error = object : ErrorCatalog {
-                override val code: String = "stub_error"
+                override val code: String = "stub.error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val params = mapOf("param1" to "value1")
-            val exception = DomainException(error, params)
+            val exception = DomainException(error, null, null)
 
-            assertEquals("DomainException(code='stub_error', message='Stub error message', params={param1=value1})", "$exception")
+            assertEquals(
+                "DomainException(code='stub.error', message='Stub error message')",
+                "$exception"
+            )
+        }
+
+        @Test
+        fun `given exception with optional values, then return string representation`() {
+            val error = object : ErrorCatalog {
+                override val code: String = "stub.error"
+                override val defaultMessage: String = "Stub error message"
+            }
+            val field = "field"
+            val rejectedValue = "invalid"
+            val exception = DomainException(error, field, rejectedValue)
+
+            assertEquals(
+                "DomainException(code='stub.error', message='Stub error message', field='field', rejectedValue='invalid')",
+                "$exception"
+            )
         }
     }
 }

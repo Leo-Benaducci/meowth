@@ -2,6 +2,7 @@ package br.com.lbenaducci.meowth.shared.domain.exceptions
 
 import br.com.lbenaducci.meowth.shared.domain.errors.ErrorCatalog
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.assertNull
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,39 +15,27 @@ class ValidationExceptionTest {
                 override val code: String = "stub_error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val exception = ValidationException(error)
+            val field = "field"
+            val exception = ValidationException(error, field)
 
-            assertEquals(error.code, exception.code)
-            assertEquals(error.defaultMessage, exception.message)
+            assertEquals(error, exception.detail.error)
+            assertEquals(field, exception.detail.field)
+            assertNull(exception.detail.rejectedValue)
         }
 
         @Test
-        fun `given error and params, then instantiate ValidationException`() {
+        fun `given error with optional values, then instantiate ValidationException`() {
             val error = object : ErrorCatalog {
                 override val code: String = "stub_error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val params = mapOf("param1" to "value1")
-            val exception = ValidationException(error, params)
+            val field = "field"
+            val rejectedValue = "invalid"
+            val exception = ValidationException(error, field, rejectedValue)
 
-            assertEquals(error.code, exception.code)
-            assertEquals(error.defaultMessage, exception.message)
-            assertEquals(params, exception.params)
-        }
-
-        @Test
-        fun `given error and invalidValue, then instantiate ValidationException`() {
-            val error = object : ErrorCatalog {
-                override val code: String = "stub_error"
-                override val defaultMessage: String = "Stub error message"
-            }
-            val invalidValue = "any_value"
-            val exception = ValidationException(error, invalidValue)
-
-            assertEquals(error.code, exception.code)
-            assertEquals(error.defaultMessage, exception.message)
-            assertEquals(1, exception.params.size)
-            assertEquals(invalidValue, exception.params["invalid"])
+            assertEquals(error, exception.detail.error)
+            assertEquals(field, exception.detail.field)
+            assertEquals(rejectedValue, exception.detail.rejectedValue)
         }
     }
 
@@ -55,12 +44,17 @@ class ValidationExceptionTest {
         @Test
         fun `given exception, then return string representation`() {
             val error = object : ErrorCatalog {
-                override val code: String = "stub_error"
+                override val code: String = "stub.error"
                 override val defaultMessage: String = "Stub error message"
             }
-            val exception = ValidationException(error, "any_value")
+            val field = "field"
+            val rejectedValue = "invalid"
+            val exception = ValidationException(error, field, rejectedValue)
 
-            assertEquals("ValidationException(code='stub_error', message='Stub error message', params={invalid=any_value})", "$exception")
+            assertEquals(
+                "ValidationException(code='stub.error', message='Stub error message', field='field', rejectedValue='invalid')",
+                "$exception"
+            )
         }
     }
 }

@@ -4,10 +4,7 @@ import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
+import kotlin.test.*
 
 class CategoryTest {
     @Nested
@@ -42,7 +39,11 @@ class CategoryTest {
             val color = "#FF0000"
 
             assertFailsWith<ValidationException> { Category.create(name, type, icon, color) }
-                .also { assertEquals(CategoryErrorCatalog.NAME_BLANK.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.NAME_BLANK, it.detail.error)
+                    assertEquals("category.name", it.detail.field)
+                    assertNull(it.detail.rejectedValue)
+                }
         }
 
         @Test
@@ -53,7 +54,11 @@ class CategoryTest {
             val color = "#FF0000"
 
             assertFailsWith<ValidationException> { Category.create(name, type, icon, color) }
-                .also { assertEquals(CategoryErrorCatalog.ICON_BLANK.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.ICON_BLANK, it.detail.error)
+                    assertEquals("category.appearance.icon", it.detail.field)
+                    assertNull(it.detail.rejectedValue)
+                }
         }
 
         @Test
@@ -64,7 +69,11 @@ class CategoryTest {
             val color = "invalid"
 
             assertFailsWith<ValidationException> { Category.create(name, type, icon, color) }
-                .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.COLOR_INVALID, it.detail.error)
+                    assertEquals("category.appearance.color", it.detail.field)
+                    assertEquals(color, it.detail.rejectedValue)
+                }
         }
     }
 }

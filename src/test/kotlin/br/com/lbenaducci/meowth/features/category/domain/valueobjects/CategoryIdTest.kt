@@ -4,7 +4,10 @@ import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCat
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
 import java.util.*
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 
 class CategoryIdTest {
     @Nested
@@ -22,8 +25,9 @@ class CategoryIdTest {
             val uuid = UUID.fromString("7d722c6b-1396-4883-b22c-6b13968883c4")
             assertFailsWith<ValidationException> { CategoryId(uuid) }
                 .also {
-                    assertEquals(CategoryErrorCatalog.UUID_VERSION.code, it.code)
-                    assertEquals(uuid, it.params["invalid"])
+                    assertEquals(CategoryErrorCatalog.UUID_VERSION, it.detail.error)
+                    assertEquals("category.id", it.detail.field)
+                    assertEquals(uuid, it.detail.rejectedValue)
                 }
         }
 
@@ -40,8 +44,9 @@ class CategoryIdTest {
             val uuid = "invalid-uuid"
             assertFailsWith<ValidationException> { CategoryId(uuid) }
                 .also {
-                    assertEquals(CategoryErrorCatalog.UUID_INVALID.code, it.code)
-                    assertEquals(uuid, it.params["invalid"])
+                    assertEquals(CategoryErrorCatalog.UUID_INVALID, it.detail.error)
+                    assertEquals("category.id", it.detail.field)
+                    assertEquals(uuid, it.detail.rejectedValue)
                 }
         }
     }

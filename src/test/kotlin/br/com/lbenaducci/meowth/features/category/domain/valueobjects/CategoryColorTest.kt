@@ -3,6 +3,7 @@ package br.com.lbenaducci.meowth.features.category.domain.valueobjects
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.assertNull
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.Test
@@ -23,7 +24,11 @@ class CategoryColorTest {
         fun `given blank color, then throw exception`() {
             val color = "   "
             assertFailsWith<ValidationException> { CategoryColor(color) }
-                .also { assertEquals(CategoryErrorCatalog.COLOR_BLANK.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.COLOR_BLANK, it.detail.error)
+                    assertEquals("category.appearance.color", it.detail.field)
+                    assertNull(it.detail.rejectedValue)
+                }
         }
 
         @ParameterizedTest
@@ -31,8 +36,9 @@ class CategoryColorTest {
         fun `given invalid color, then throw exception`(color: String) {
             assertFailsWith<ValidationException> { CategoryColor(color) }
                 .also {
-                    assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code)
-                    assertEquals(color, it.params["invalid"])
+                    assertEquals(CategoryErrorCatalog.COLOR_INVALID, it.detail.error)
+                    assertEquals("category.appearance.color", it.detail.field)
+                    assertEquals(color, it.detail.rejectedValue)
                 }
         }
     }

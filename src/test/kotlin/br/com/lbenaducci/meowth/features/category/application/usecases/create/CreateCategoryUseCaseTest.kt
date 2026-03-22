@@ -2,22 +2,15 @@ package br.com.lbenaducci.meowth.features.category.application.usecases.create
 
 import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
-import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
-import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import br.com.lbenaducci.meowth.features.category.domain.gateways.CategoryGateway
+import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doThrow
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
+import org.mockito.kotlin.*
+import kotlin.test.*
 
 @ExtendWith(MockitoExtension::class)
 class CreateCategoryUseCaseTest {
@@ -52,7 +45,7 @@ class CreateCategoryUseCaseTest {
         )
 
         assertFailsWith<ValidationException> { useCase.execute(input) }
-            .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID.code, it.code) }
+            .also { assertEquals(CategoryErrorCatalog.COLOR_INVALID, it.detail.error) }
 
         verify(gateway, never()).save(any())
     }
@@ -69,7 +62,11 @@ class CreateCategoryUseCaseTest {
         whenever(gateway.save(any())).doThrow(RuntimeException("Repository failed"))
 
         assertFailsWith<RepositoryException> { useCase.execute(input) }
-            .also { assertEquals(CategoryErrorCatalog.REPOSITORY_ERROR.code, it.code) }
+            .also {
+                assertEquals(CategoryErrorCatalog.REPOSITORY_ERROR, it.detail.error)
+                assertNull(it.detail.field)
+                assertNull(it.detail.rejectedValue)
+            }
 
         verify(gateway).save(any())
     }

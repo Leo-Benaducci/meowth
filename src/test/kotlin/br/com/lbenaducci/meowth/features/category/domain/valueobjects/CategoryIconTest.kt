@@ -3,6 +3,7 @@ package br.com.lbenaducci.meowth.features.category.domain.valueobjects
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.assertNull
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -21,7 +22,11 @@ class CategoryIconTest {
         fun `given blank icon, then throw exception`() {
             val icon = "   "
             assertFailsWith<ValidationException> { CategoryIcon(icon) }
-                .also { assertEquals(CategoryErrorCatalog.ICON_BLANK.code, it.code) }
+                .also {
+                    assertEquals(CategoryErrorCatalog.ICON_BLANK, it.detail.error)
+                    assertEquals("category.appearance.icon", it.detail.field)
+                    assertNull(it.detail.rejectedValue)
+                }
         }
 
         @Test
@@ -29,8 +34,9 @@ class CategoryIconTest {
             val icon = "a".repeat(31)
             assertFailsWith<ValidationException> { CategoryIcon(icon) }
                 .also {
-                    assertEquals(CategoryErrorCatalog.ICON_LONG.code, it.code)
-                    assertEquals(icon, it.params["invalid"])
+                    assertEquals(CategoryErrorCatalog.ICON_LONG, it.detail.error)
+                    assertEquals("category.appearance.icon", it.detail.field)
+                    assertEquals(icon, it.detail.rejectedValue)
                 }
         }
     }
