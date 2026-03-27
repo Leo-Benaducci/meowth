@@ -80,7 +80,7 @@ class CategoryTest {
     }
 
     @Nested
-    inner class Constructor {
+    inner class With {
         @Test
         fun `given valid data, then instantiate Category`() {
             val expectedId = UUID.fromString("019cdab8-93fd-7262-8526-786a9ca26d05")
