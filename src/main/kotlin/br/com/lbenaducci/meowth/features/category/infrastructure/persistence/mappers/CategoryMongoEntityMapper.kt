@@ -13,3 +13,14 @@ fun Category.toMongoEntity(): CategoryMongoEntity {
         color = this.appearance.color.value
     )
 }
+
+fun CategoryMongoEntity.toEntity(): Category {
+    return Category.with(
+        id = this.id,
+        createdAt = this.createdAt,
+        name = this.name,
+        type = this.type,
+        icon = this.icon,
+        color = this.color
+    )
+}

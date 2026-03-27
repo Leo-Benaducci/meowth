@@ -15,5 +15,6 @@ enum class CategoryErrorCatalog(
     COLOR_INVALID("invalid.category.color", "category color must be a valid hex color code"),
     ICON_BLANK("invalid.category.icon.blank", "category icon cannot be blank"),
     ICON_LONG("invalid.category.icon.long", "category icon must be 30 characters or less"),
-    REPOSITORY_ERROR("error.category.repository.unexpected", "an unexpected error occurred in the category repository")
+    REPOSITORY_ERROR("error.category.repository.unexpected", "an unexpected error occurred in the category repository"),
+    NOT_FOUND("error.category.not.found", "category not found")
 }

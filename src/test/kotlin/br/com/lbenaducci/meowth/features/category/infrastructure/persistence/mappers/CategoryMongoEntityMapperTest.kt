@@ -2,7 +2,10 @@ package br.com.lbenaducci.meowth.features.category.infrastructure.persistence.ma
 
 import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.entities.Category
+import br.com.lbenaducci.meowth.features.category.infrastructure.persistence.CategoryMongoEntity
 import org.junit.jupiter.api.Nested
+import java.time.Instant
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -31,6 +34,37 @@ class CategoryMongoEntityMapperTest {
             assertEquals(expectedType, actualEntity.type)
             assertEquals(expectedIcon, actualEntity.icon)
             assertEquals(expectedColor, actualEntity.color)
+        }
+    }
+
+    @Nested
+    inner class ToEntity {
+        @Test
+        fun `given a valid CategoryMongoEntity, then return a Category`() {
+            val expectedId = UUID.fromString("019cdab8-93fd-7262-8526-786a9ca26d05")
+            val expectedCreatedAt = Instant.parse("2026-01-01T00:00:00.00Z")
+            val expectedName = "Lazer"
+            val expectedType = CategoryType.EXPENSE
+            val expectedIcon = "house"
+            val expectedColor = "#FFFFFF"
+
+            val aCategory = CategoryMongoEntity(
+                id = expectedId,
+                createdAt = expectedCreatedAt,
+                name = expectedName,
+                type = expectedType,
+                icon = expectedIcon,
+                color = expectedColor
+            )
+
+            val actualCategory = aCategory.toEntity()
+
+            assertEquals(expectedId, actualCategory.id.value)
+            assertEquals(expectedCreatedAt, actualCategory.createdAt)
+            assertEquals(expectedName, actualCategory.name.value)
+            assertEquals(expectedType, actualCategory.type)
+            assertEquals(expectedIcon, actualCategory.appearance.icon.value)
+            assertEquals(expectedColor, actualCategory.appearance.color.value)
         }
     }
 }
