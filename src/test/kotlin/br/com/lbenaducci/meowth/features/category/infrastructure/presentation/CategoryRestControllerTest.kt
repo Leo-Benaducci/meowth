@@ -2,8 +2,12 @@ package br.com.lbenaducci.meowth.features.category.infrastructure.presentation
 
 import br.com.lbenaducci.meowth.features.category.application.usecases.create.CreateCategoryOutput
 import br.com.lbenaducci.meowth.features.category.application.usecases.create.CreateCategoryUseCase
+import br.com.lbenaducci.meowth.features.category.application.usecases.retrieve.get.FindCategoryByIdOutput
+import br.com.lbenaducci.meowth.features.category.application.usecases.retrieve.get.FindCategoryByIdUseCase
+import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
 import br.com.lbenaducci.meowth.features.category.domain.errors.CategoryErrorCatalog
 import br.com.lbenaducci.meowth.platform.ControllerTest
+import br.com.lbenaducci.meowth.shared.domain.exceptions.NotFoundException
 import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import org.junit.jupiter.api.Nested
@@ -13,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import java.time.Instant
 import java.util.*
 import kotlin.test.Test
 
@@ -24,6 +30,9 @@ class CategoryRestControllerTest {
 
     @MockitoBean
     private lateinit var createCategoryUseCase: CreateCategoryUseCase
+
+    @MockitoBean
+    private lateinit var findCategoryByIdUseCase: FindCategoryByIdUseCase
 
     @Nested
     inner class Create {
@@ -106,6 +115,71 @@ class CategoryRestControllerTest {
                 jsonPath("$.details.code") { value("error.category.repository.unexpected") }
                 jsonPath("$.details.message") { value("an unexpected error occurred in the category repository") }
             }
+        }
+    }
+
+    @Nested
+    inner class FindById {
+        @Test
+        fun `given valid id, then return 200 and category`() {
+            val id = UUID.randomUUID().toString()
+            val output = FindCategoryByIdOutput(
+                id = id,
+                name = "Test Category",
+                type = CategoryType.EXPENSE,
+                icon = "icon",
+                color = "#FF0000",
+                createdAt = Instant.now()
+            )
+            whenever(findCategoryByIdUseCase.execute(any()))
+                .thenReturn(output)
+
+            mockMvc.get("/v1/categories/$id")
+                .andExpect {
+                    status { isOk() }
+                    jsonPath("$.id") { value(id) }
+                    jsonPath("$.name") { value(output.name) }
+                    jsonPath("$.type") { value(output.type.name) }
+                    jsonPath("$.icon") { value(output.icon) }
+                    jsonPath("$.color") { value(output.color) }
+                    jsonPath("$.createdAt") { exists() }
+                }
+        }
+
+        @Test
+        fun `given non existing id, then return 404`() {
+            val id = UUID.randomUUID().toString()
+            whenever(findCategoryByIdUseCase.execute(any()))
+                .thenThrow(NotFoundException(CategoryErrorCatalog.NOT_FOUND))
+
+            mockMvc.get("/v1/categories/$id")
+                .andExpect {
+                    status { isNotFound() }
+                    jsonPath("$.timestamp") { exists() }
+                    jsonPath("$.status") { value("NOT_FOUND") }
+                    jsonPath("$.path") { value("/v1/categories/$id") }
+                    jsonPath("$.title") { value("Not Found") }
+                    jsonPath("$.details.code") { value("error.category.not.found") }
+                    jsonPath("$.details.message") { value("category not found") }
+                }
+        }
+
+        @Test
+        fun `given valid id, when call throw RepositoryException, then return 500`() {
+            val id = UUID.randomUUID().toString()
+            whenever(findCategoryByIdUseCase.execute(any()))
+                .thenThrow(RepositoryException(CategoryErrorCatalog.REPOSITORY_ERROR))
+
+            mockMvc.get("/v1/categories/$id")
+                .andExpect {
+                    status { isInternalServerError() }
+                    jsonPath("$.timestamp") { exists() }
+                    jsonPath("$.status") { value("INTERNAL_SERVER_ERROR") }
+                    jsonPath("$.path") { value("/v1/categories/$id") }
+                    jsonPath("$.title") { value("Internal Server Error") }
+                    jsonPath("$.details.code") { value("error.category.repository.unexpected") }
+                    jsonPath("$.details.message") { value("an unexpected error occurred in the category repository") }
+                }
         }
     }
 }

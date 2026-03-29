@@ -1,13 +1,18 @@
 package br.com.lbenaducci.meowth.features.category.infrastructure.presentation
 
 import br.com.lbenaducci.meowth.features.category.application.usecases.create.CreateCategoryUseCase
+import br.com.lbenaducci.meowth.features.category.application.usecases.retrieve.get.FindCategoryByIdUseCase
+import br.com.lbenaducci.meowth.features.category.domain.datatypes.CategoryType
+import br.com.lbenaducci.meowth.features.category.domain.entities.Category
 import br.com.lbenaducci.meowth.features.category.infrastructure.persistence.CategoryRepository
+import br.com.lbenaducci.meowth.features.category.infrastructure.persistence.mappers.toMongoEntity
 import br.com.lbenaducci.meowth.platform.E2ETest
 import br.com.lbenaducci.meowth.platform.MongoTestContainer
 import org.junit.jupiter.api.Nested
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,6 +24,9 @@ class CategoryRestControllerE2ETest : MongoTestContainer() {
 
     @Autowired
     private lateinit var createCategoryUseCase: CreateCategoryUseCase
+
+    @Autowired
+    private lateinit var findCategoryByIdUseCase: FindCategoryByIdUseCase
 
     @Autowired
     private lateinit var repository: CategoryRepository
@@ -78,6 +86,49 @@ class CategoryRestControllerE2ETest : MongoTestContainer() {
             }
 
             assertEquals(0, repository.count())
+        }
+    }
+
+    @Nested
+    inner class FindById {
+        @Test
+        fun `given valid id, then return 200 and category`() {
+            val category = Category.create(
+                name = "Test Category",
+                type = CategoryType.EXPENSE,
+                icon = "icon",
+                color = "#FF0000"
+            )
+            repository.save(category.toMongoEntity())
+
+            val id = category.id.value.toString()
+
+            mockMvc.get("/v1/categories/$id")
+                .andExpect {
+                    status { isOk() }
+                    jsonPath("$.id") { value(id) }
+                    jsonPath("$.name") { value(category.name.value) }
+                    jsonPath("$.type") { value(category.type.name) }
+                    jsonPath("$.icon") { value(category.appearance.icon.value) }
+                    jsonPath("$.color") { value(category.appearance.color.value) }
+                    jsonPath("$.createdAt") { exists() }
+                }
+        }
+
+        @Test
+        fun `given non existing id, then return 404`() {
+            val id = "019d37d5-a8a8-7e00-84ba-1409b5305738"
+
+            mockMvc.get("/v1/categories/$id")
+                .andExpect {
+                    status { isNotFound() }
+                    jsonPath("$.timestamp") { exists() }
+                    jsonPath("$.status") { value("NOT_FOUND") }
+                    jsonPath("$.path") { value("/v1/categories/$id") }
+                    jsonPath("$.title") { value("Not Found") }
+                    jsonPath("$.details.code") { value("error.category.not.found") }
+                    jsonPath("$.details.message") { value("category not found") }
+                }
         }
     }
 }

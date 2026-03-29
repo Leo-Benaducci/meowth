@@ -1,6 +1,7 @@
 package br.com.lbenaducci.meowth.platform.config
 
 import br.com.lbenaducci.meowth.shared.domain.exceptions.DomainException
+import br.com.lbenaducci.meowth.shared.domain.exceptions.NotFoundException
 import br.com.lbenaducci.meowth.shared.domain.exceptions.RepositoryException
 import br.com.lbenaducci.meowth.shared.domain.exceptions.ValidationException
 import com.fasterxml.jackson.annotation.JsonFormat
@@ -18,6 +19,12 @@ class GlobalExceptionHandler {
     fun handleDomainException(ex: DomainException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
         return ResponseEntity.unprocessableContent()
             .body(errorResponse(ex, request, HttpStatus.UNPROCESSABLE_ENTITY))
+    }
+
+    @ExceptionHandler(NotFoundException::class)
+    fun handleNotFoundException(ex: NotFoundException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(errorResponse(ex, request, HttpStatus.NOT_FOUND))
     }
 
     @ExceptionHandler(ValidationException::class)
