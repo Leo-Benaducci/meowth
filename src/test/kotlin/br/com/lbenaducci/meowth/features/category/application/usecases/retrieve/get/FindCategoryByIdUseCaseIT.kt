@@ -36,6 +36,7 @@ class FindCategoryByIdUseCaseIT : MongoTestContainer() {
         val category = CategoryMongoEntity(
             id = UUID.fromString(id),
             createdAt = createdAt,
+            updatedAt = createdAt,
             name = name,
             type = type,
             icon = icon,
@@ -51,6 +52,7 @@ class FindCategoryByIdUseCaseIT : MongoTestContainer() {
         assertNotNull(actual)
         assertEquals(id, actual.id)
         assertEquals(createdAt, actual.createdAt)
+        assertEquals(createdAt, actual.updatedAt)
         assertEquals(name, actual.name)
         assertEquals(type, actual.type)
         assertEquals(icon, actual.icon)

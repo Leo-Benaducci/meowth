@@ -13,6 +13,8 @@ class CategoryMongoEntity(
     var id: UUID,
     @Field(name = "created_at")
     var createdAt: Instant,
+    @Field(name = "updated_at")
+    var updatedAt: Instant,
     var name: String,
     var type: CategoryType,
     var icon: String,

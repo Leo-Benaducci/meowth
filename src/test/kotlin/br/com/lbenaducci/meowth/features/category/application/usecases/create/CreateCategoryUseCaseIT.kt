@@ -40,6 +40,7 @@ class CreateCategoryUseCaseIT : MongoTestContainer() {
         val savedCategory = repository.findById(UUID.fromString(output.id))
             .orElseGet { fail("ID does not exist") }
         assertNotNull(savedCategory.createdAt)
+        assertNotNull(savedCategory.updatedAt)
         assertEquals(input.name, savedCategory.name)
         assertEquals(input.type, savedCategory.type)
         assertEquals(input.icon, savedCategory.icon)

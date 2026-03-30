@@ -129,7 +129,8 @@ class CategoryRestControllerTest {
                 type = CategoryType.EXPENSE,
                 icon = "icon",
                 color = "#FF0000",
-                createdAt = Instant.now()
+                createdAt = Instant.now(),
+                updatedAt = Instant.now()
             )
             whenever(findCategoryByIdUseCase.execute(any()))
                 .thenReturn(output)
@@ -143,6 +144,7 @@ class CategoryRestControllerTest {
                     jsonPath("$.icon") { value(output.icon) }
                     jsonPath("$.color") { value(output.color) }
                     jsonPath("$.createdAt") { exists() }
+                    jsonPath("$.updatedAt") { exists() }
                 }
         }
 

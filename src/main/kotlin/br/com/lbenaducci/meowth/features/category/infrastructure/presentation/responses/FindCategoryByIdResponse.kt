@@ -7,6 +7,7 @@ import java.time.Instant
 data class FindCategoryByIdResponse(
     val id: String,
     val createdAt: Instant,
+    val updatedAt: Instant,
     val name: String,
     val type: CategoryType,
     val icon: String,
@@ -17,6 +18,7 @@ data class FindCategoryByIdResponse(
             return FindCategoryByIdResponse(
                 id = output.id,
                 createdAt = output.createdAt,
+                updatedAt = output.updatedAt,
                 name = output.name,
                 type = output.type,
                 icon = output.icon,

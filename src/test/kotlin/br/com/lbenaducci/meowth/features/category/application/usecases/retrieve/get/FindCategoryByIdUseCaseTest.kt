@@ -42,7 +42,8 @@ class FindCategoryByIdUseCaseTest {
 
         assertNotNull(actual)
         assertEquals(id, actual.id)
-        assertEquals(category.createdAt, actual.createdAt)
+        assertEquals(category.audit.createdAt, actual.createdAt)
+        assertEquals(category.audit.updatedAt, actual.updatedAt)
         assertEquals(name, actual.name)
         assertEquals(type, actual.type)
         assertEquals(icon, actual.icon)

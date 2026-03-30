@@ -112,6 +112,7 @@ class CategoryRestControllerE2ETest : MongoTestContainer() {
                     jsonPath("$.icon") { value(category.appearance.icon.value) }
                     jsonPath("$.color") { value(category.appearance.color.value) }
                     jsonPath("$.createdAt") { exists() }
+                    jsonPath("$.updatedAt") { exists() }
                 }
         }
 

@@ -6,7 +6,8 @@ import br.com.lbenaducci.meowth.features.category.infrastructure.persistence.Cat
 fun Category.toMongoEntity(): CategoryMongoEntity {
     return CategoryMongoEntity(
         id = this.id.value,
-        createdAt = this.createdAt,
+        createdAt = this.audit.createdAt,
+        updatedAt = this.audit.updatedAt,
         name = this.name.value,
         type = this.type,
         icon = this.appearance.icon.value,
@@ -18,6 +19,7 @@ fun CategoryMongoEntity.toEntity(): Category {
     return Category.with(
         id = this.id,
         createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
         name = this.name,
         type = this.type,
         icon = this.icon,

@@ -22,7 +22,8 @@ class FindCategoryByIdUseCase(
             }.getOrNull() ?: throw NotFoundException(CategoryErrorCatalog.NOT_FOUND)
         return FindCategoryByIdOutput(
             id = category.id.value.toString(),
-            createdAt = category.createdAt,
+            createdAt = category.audit.createdAt,
+            updatedAt = category.audit.updatedAt,
             name = category.name.value,
             type = category.type,
             icon = category.appearance.icon.value,

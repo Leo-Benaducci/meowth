@@ -44,7 +44,8 @@ class CategoryMongoGatewayTest : MongoTestContainer() {
             assertEquals(1, repository.count())
             val fetchedCategory = repository.findById(category.id.value)
                 .orElseGet { fail("Category not found") }
-            assertEquals(category.createdAt, fetchedCategory.createdAt)
+            assertEquals(category.audit.createdAt, fetchedCategory.createdAt)
+            assertEquals(category.audit.updatedAt, fetchedCategory.updatedAt)
             assertEquals(name, fetchedCategory.name)
             assertEquals(type, fetchedCategory.type)
             assertEquals(icon, fetchedCategory.icon)
@@ -70,6 +71,7 @@ class CategoryMongoGatewayTest : MongoTestContainer() {
             val category = CategoryMongoEntity(
                 id = id.value,
                 createdAt = Instant.now().truncatedTo(ChronoUnit.MILLIS),
+                updatedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS),
                 name = "Test Category",
                 type = CategoryType.ACCOUNT,
                 icon = "account",
@@ -82,7 +84,8 @@ class CategoryMongoGatewayTest : MongoTestContainer() {
 
             assertNotNull(fetchedCategory)
             assertEquals(category.id, fetchedCategory.id.value)
-            assertEquals(category.createdAt, fetchedCategory.createdAt)
+            assertEquals(category.createdAt, fetchedCategory.audit.createdAt)
+            assertEquals(category.updatedAt, fetchedCategory.audit.updatedAt)
             assertEquals(category.name, fetchedCategory.name.value)
             assertEquals(category.type, fetchedCategory.type)
             assertEquals(category.icon, fetchedCategory.appearance.icon.value)

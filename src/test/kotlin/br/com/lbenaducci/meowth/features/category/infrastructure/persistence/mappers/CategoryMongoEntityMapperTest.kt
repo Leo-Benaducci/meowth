@@ -29,7 +29,8 @@ class CategoryMongoEntityMapperTest {
             val actualEntity = aCategory.toMongoEntity()
 
             assertEquals(aCategory.id.value, actualEntity.id)
-            assertEquals(aCategory.createdAt, actualEntity.createdAt)
+            assertEquals(aCategory.audit.createdAt, actualEntity.createdAt)
+            assertEquals(aCategory.audit.updatedAt, actualEntity.updatedAt)
             assertEquals(expectedName, actualEntity.name)
             assertEquals(expectedType, actualEntity.type)
             assertEquals(expectedIcon, actualEntity.icon)
@@ -51,6 +52,7 @@ class CategoryMongoEntityMapperTest {
             val aCategory = CategoryMongoEntity(
                 id = expectedId,
                 createdAt = expectedCreatedAt,
+                updatedAt = expectedCreatedAt,
                 name = expectedName,
                 type = expectedType,
                 icon = expectedIcon,
@@ -60,7 +62,8 @@ class CategoryMongoEntityMapperTest {
             val actualCategory = aCategory.toEntity()
 
             assertEquals(expectedId, actualCategory.id.value)
-            assertEquals(expectedCreatedAt, actualCategory.createdAt)
+            assertEquals(expectedCreatedAt, actualCategory.audit.createdAt)
+            assertEquals(expectedCreatedAt, actualCategory.audit.updatedAt)
             assertEquals(expectedName, actualCategory.name.value)
             assertEquals(expectedType, actualCategory.type)
             assertEquals(expectedIcon, actualCategory.appearance.icon.value)

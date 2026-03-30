@@ -7,6 +7,7 @@ import java.time.Instant
 data class FindCategoryByIdOutput(
     val id: String,
     val createdAt: Instant,
+    val updatedAt: Instant,
     val name: String,
     val type: CategoryType,
     val icon: String,
