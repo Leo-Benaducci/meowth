@@ -24,7 +24,7 @@ class CategoryMongoGatewayTest : MongoTestContainer() {
     private lateinit var repository: CategoryRepository
 
     @Nested
-    inner class Create {
+    inner class Save {
         @Test
         fun `given a valid category, then create a new category`() {
             val name = "Test Category"

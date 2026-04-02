@@ -14,8 +14,11 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotSame
+import kotlin.test.fail
 
 @E2ETest
 class CategoryRestControllerE2ETest : MongoTestContainer() {
@@ -130,6 +133,69 @@ class CategoryRestControllerE2ETest : MongoTestContainer() {
                     jsonPath("$.details.code") { value("error.category.not.found") }
                     jsonPath("$.details.message") { value("category not found") }
                 }
+        }
+    }
+
+    @Nested
+    inner class Update {
+        @Test
+        fun `given valid params, then return 200 and update category`() {
+            val requestBody = """
+            {
+                "name": "Food",
+                "icon": "food",
+                "color": "#FFFFFF"
+            }
+        """.trimIndent()
+
+            val category = Category.create(
+                name = "Test Category",
+                type = CategoryType.EXPENSE,
+                icon = "icon",
+                color = "#FF0000"
+            )
+            val id = category.id.value
+            repository.save(category.toMongoEntity())
+
+            mockMvc.put("/v1/categories/$id") {
+                contentType = MediaType.APPLICATION_JSON
+                content = requestBody
+            }.andExpect {
+                status { isOk() }
+            }
+
+            val fetchedCategory = repository.findById(category.id.value)
+                .orElseGet { fail("Not found") }
+
+            assertEquals("Food", fetchedCategory.name)
+            assertEquals("food", fetchedCategory.icon)
+            assertEquals("#FFFFFF", fetchedCategory.color)
+            assertNotSame(category.audit.createdAt, fetchedCategory.updatedAt)
+        }
+
+        @Test
+        fun `given non existing id, then return 404`() {
+            val id = "019d46cc-dbd3-7f13-b020-dd8ed2cffb4b"
+            val requestBody = """
+            {
+                "name": "Test Category",
+                "icon": "icon",
+                "color": "#FF0000"
+            }
+        """.trimIndent()
+
+            mockMvc.put("/v1/categories/$id") {
+                contentType = MediaType.APPLICATION_JSON
+                content = requestBody
+            }.andExpect {
+                status { isNotFound() }
+                jsonPath("$.timestamp") { exists() }
+                jsonPath("$.status") { value("NOT_FOUND") }
+                jsonPath("$.path") { value("/v1/categories/$id") }
+                jsonPath("$.title") { value("Not Found") }
+                jsonPath("$.details.code") { value("error.category.not.found") }
+                jsonPath("$.details.message") { value("category not found") }
+            }
         }
     }
 }
